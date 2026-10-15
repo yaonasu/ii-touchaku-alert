@@ -17,17 +17,25 @@ jobs:
         with:
           node-version: 22
 
-      - name: Set up Java JDK 17
+      - name: Set up Java JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
       - name: Build Web Assets
-        run: npm run build
+        run: |
+          if [ -d "src" ]; then
+            npm run build
+          elif [ -d "dist" ]; then
+            echo "src directory missing, but pre-built dist exists. Skipping web build..."
+          else
+            echo "Error: neither src nor dist directory was found in repository!"
+            exit 1
+          fi
 
       - name: Setup Android Platform (Auto-generate if missing)
         run: |
