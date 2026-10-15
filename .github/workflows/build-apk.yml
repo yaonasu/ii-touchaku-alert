@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Set up Java JDK 17
         uses: actions/setup-java@v4
@@ -29,17 +29,65 @@ jobs:
       - name: Build Web Assets
         run: npm run build
 
-      - name: Sync Capacitor Android
-        run: npx cap sync android
+      - name: Setup Android Platform (Auto-generate if missing)
+        run: |
+          if [ ! -d "android" ] || [ ! -f "android/gradlew" ]; then
+            echo "Android folder is missing or incomplete. Generating from scratch..."
+            rm -rf android
+            npx cap add android
+          else
+            echo "Syncing existing Android platform..."
+            npx cap sync android
+          fi
 
-      - name: Accept Android Licenses & Build APK
+      - name: Inject App Icons & Permissions
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Ensure permissions in AndroidManifest.xml
+          const manifestPath = path.resolve('android/app/src/main/AndroidManifest.xml');
+          if (fs.existsSync(manifestPath)) {
+            let manifest = fs.readFileSync(manifestPath, 'utf8');
+            const perms = [
+              'android.permission.ACCESS_FINE_LOCATION',
+              'android.permission.ACCESS_COARSE_LOCATION',
+              'android.permission.VIBRATE',
+              'android.permission.WAKE_LOCK',
+              'android.permission.FOREGROUND_SERVICE',
+              'android.permission.FOREGROUND_SERVICE_LOCATION'
+            ];
+            for (const p of perms) {
+              if (!manifest.includes(p)) {
+                manifest = manifest.replace('</manifest>', '    <uses-permission android:name=\"' + p + '\" />\n</manifest>');
+              }
+            }
+            fs.writeFileSync(manifestPath, manifest, 'utf8');
+          }
+
+          // Copy icons to res mipmap folders
+          const srcIcon = path.resolve('public/pwa-512x512.png');
+          const resDir = path.resolve('android/app/src/main/res');
+          if (fs.existsSync(srcIcon) && fs.existsSync(resDir)) {
+            const mipmaps = ['mipmap-mdpi', 'mipmap-hdpi', 'mipmap-xhdpi', 'mipmap-xxhdpi', 'mipmap-xxxhdpi'];
+            for (const m of mipmaps) {
+              const targetDir = path.join(resDir, m);
+              if (fs.existsSync(targetDir)) {
+                fs.copyFileSync(srcIcon, path.join(targetDir, 'ic_launcher.png'));
+                fs.copyFileSync(srcIcon, path.join(targetDir, 'ic_launcher_round.png'));
+              }
+            }
+          }
+          "
+
+      - name: Build Android APK
         working-directory: android
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Upload APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ii-到着通知-apk
