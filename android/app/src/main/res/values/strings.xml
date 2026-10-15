@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ii-到着通知</string>
+    <string name="title_activity_main">ii-到着通知</string>
+    <string name="package_name">com.iinotify.app</string>
+    <string name="custom_url_scheme">com.iinotify.app</string>
+</resources>

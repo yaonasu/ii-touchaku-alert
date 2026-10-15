@@ -1,0 +1,6 @@
+{
+  "name": "駅到着アラーム (Station Arrival Alarm)",
+  "description": "地図上で最大3箇所の駅や目的地を登録し、半径500m以内に入ると音と通知・バイブレーションで自動的にお知らせする乗り過ごし防止アプリ",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

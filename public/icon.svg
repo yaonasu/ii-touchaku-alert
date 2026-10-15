@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="50%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="trainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)" />
+
+  <!-- Radar Geofence Pulse Rings (500m representation) -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#60a5fa" stroke-width="6" opacity="0.25" stroke-dasharray="16 12" />
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#93c5fd" stroke-width="8" opacity="0.4" />
+  <circle cx="256" cy="256" r="110" fill="none" stroke="#bfdbfe" stroke-width="10" opacity="0.5" />
+
+  <!-- Train Body -->
+  <g filter="url(#shadow)">
+    <!-- Base Car -->
+    <rect x="136" y="140" width="240" height="230" rx="48" fill="url(#trainGrad)" stroke="#cbd5e1" stroke-width="6" />
+
+    <!-- Train Windshield / Front Window -->
+    <rect x="160" y="170" width="192" height="85" rx="18" fill="#0f172a" />
+    <path d="M175 180 L210 180 L185 245 L170 245 Z" fill="#38bdf8" opacity="0.75" />
+    <path d="M225 180 L245 180 L220 245 L210 245 Z" fill="#38bdf8" opacity="0.4" />
+
+    <!-- Train Line Color Stripe (Cyan/Emerald) -->
+    <rect x="136" y="270" width="240" height="20" fill="#10b981" />
+
+    <!-- Headlights -->
+    <circle cx="180" cy="320" r="16" fill="#fef08a" stroke="#ca8a04" stroke-width="3" />
+    <circle cx="332" cy="320" r="16" fill="#fef08a" stroke="#ca8a04" stroke-width="3" />
+
+    <!-- Train Grille / Bumper -->
+    <rect x="216" y="315" width="80" height="12" rx="6" fill="#64748b" />
+    <rect x="226" y="335" width="60" height="8" rx="4" fill="#94a3b8" />
+  </g>
+
+  <!-- Alert Bell Badge in top right -->
+  <g transform="translate(320, 70)" filter="url(#shadow)">
+    <circle cx="45" cy="45" r="46" fill="#ef4444" stroke="#ffffff" stroke-width="6" />
+    <!-- Bell Icon -->
+    <path d="M45 22 C37 22 30 28 30 36 L30 50 L24 56 L24 60 L66 60 L66 56 L60 50 L60 36 C60 28 53 22 45 22 Z" fill="#ffffff" />
+    <circle cx="45" cy="67" r="5" fill="#ffffff" />
+  </g>
+
+  <!-- Waves from bell -->
+  <path d="M410 80 A25 25 0 0 1 435 110" fill="none" stroke="#fca5a5" stroke-width="5" stroke-linecap="round" />
+  <path d="M420 70 A40 40 0 0 1 455 120" fill="none" stroke="#f87171" stroke-width="5" stroke-linecap="round" />
+</svg>
