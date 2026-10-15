@@ -24,7 +24,7 @@ jobs:
           java-version: '17'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Build Web Assets
         run: npm run build
@@ -32,13 +32,14 @@ jobs:
       - name: Setup Android Platform (Auto-generate if missing)
         run: |
           if [ ! -d "android" ] || [ ! -f "android/gradlew" ]; then
-            echo "Android folder is missing or incomplete. Generating from scratch..."
+            echo "Generating android platform..."
             rm -rf android
             npx cap add android
           else
-            echo "Syncing existing Android platform..."
+            echo "Syncing android platform..."
             npx cap sync android
           fi
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
 
       - name: Inject App Icons & Permissions
         run: |
